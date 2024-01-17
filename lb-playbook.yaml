@@ -1,0 +1,31 @@
+---
+- name: Add source to app_1
+  hosts: app_1
+  remote_user: ubuntu
+
+  tasks:
+  - name: create web1
+    ansible.builtin.copy:
+      src: index1.html
+      dest: /home/ubuntu/index12.html
+
+- name: Add source to app_2
+  hosts: app_2
+  remote_user: ubuntu
+
+  tasks:
+  - name: create web2
+    ansible.builtin.copy:
+      src: index2.html
+      dest: /home/ubuntu/index22.html
+
+- name: Start service
+  hosts: service
+  remote_user: ubuntu
+
+  tasks:
+  - name: Run python server
+    ansible.builtin.command:
+      cmd: python3 -m http.server 8000
+      chdir: /home/ubuntu
+    

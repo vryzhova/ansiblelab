@@ -1,0 +1,43 @@
+---
+- name: Setup nginx
+  hosts: balancer
+  remote_user: ubuntu
+
+  tasks:
+  - name: apt-get update
+    ansible.builtin.command:
+      argv:
+        - sudo
+        - apt-get
+        - update
+
+  - name: Install nginx
+    ansible.builtin.command:
+      argv:
+        - sudo
+        - apt-get
+        - install
+        - nginx
+        - -y
+
+  - name: Confure access rights
+    ansible.builtin.command:
+      argv:
+        - sudo
+        - chmod
+        - -R
+        - 777
+        - /etc/nginx/sites-available
+
+  - name: Configure nginx
+    ansible.builtin.copy:
+      src: ./nginx.conf
+      dest: /etc/nginx/sites-available/default
+
+  - name: Reload nginx
+    ansible.builtin.command:
+      argv:
+        - sudo
+        - systemctl
+        - restart
+        - nginx
